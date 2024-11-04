@@ -4,11 +4,17 @@ import AboutContent from "./AboutContent";
 import DeckContent from "./DeckContent";
 import LearnersContent from "./LearnerContent";
 
-const BodyContent = ({ selectedMenu }) => {
+const BodyContent = ({ selectedClass, selectedMenu }) => {
   const renderContent = () => {
+    console.log(selectedClass, "selected class tại body content");
+
     switch (selectedMenu) {
       case "About":
-        return <AboutContent />;
+        return selectedClass ? (
+          <AboutContent selectedClass={selectedClass} />
+        ) : (
+          <div>Loading class information...</div> // hoặc có thể là null
+        );
       case "Deck":
         return <DeckContent />;
       case "Learners":
