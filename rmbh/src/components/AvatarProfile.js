@@ -13,7 +13,7 @@ const AvatarProfile = ({ user }) => {
           src={user?.profilePicture}
           className="cursor-pointer"
         />
-        <span className="mt-2 text-sm text-white">
+        <span className="mt-2 text-sm hover:text-black-500 text-white">
           {user ? `${user.name}` : "Guest"}
         </span>
       </div>

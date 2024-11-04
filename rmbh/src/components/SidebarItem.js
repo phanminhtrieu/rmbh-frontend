@@ -23,16 +23,16 @@ const SidebarItem = ({ userId, handleClassSelect, onAddClass }) => {
 
   // Sử dụng useEffect để gọi fetchClasses khi component mount
   useEffect(() => {
-    console.log(userId);
     fetchClasses();
   }, [userId]); // Chỉ gọi lại khi userId thay đổi
 
   // Định nghĩa các mục menu
   const items = [
     {
+      key: "myClassesGroup",
       label: (
-        <div className="flex justify-between items-center">
-          <span className="text-white">My classes</span>
+        <div className="flex justify-around items-center mb-2">
+          <span className="text-white mr-14">My classes</span>
           <Avatar
             icon={<PlusOutlined />}
             size={24}
@@ -41,15 +41,17 @@ const SidebarItem = ({ userId, handleClassSelect, onAddClass }) => {
           />
         </div>
       ),
-      key: "myClassesGroup",
-      children: loading
-        ? [{ label: "Loading...", key: "loading" }]
-        : classes.map((cls) => ({
-            label: cls.title, // Sử dụng title từ ClassDto
-            key: cls.id.toString(), // Khóa từ ID của lớp
-            onClick: () => handleClassSelect(cls),
-          })),
     },
+    ...(loading
+      ? [{ key: "loading", label: "Loading..." }]
+      : classes.map((cls) => ({
+          key: cls.id.toString(), // Khóa từ ID của lớp
+          label: (
+            <div onClick={() => handleClassSelect(cls)}>
+              {cls.title} {/* Sử dụng title từ ClassDto */}
+            </div>
+          ),
+        }))),
   ];
 
   return (
