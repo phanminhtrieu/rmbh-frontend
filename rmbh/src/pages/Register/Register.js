@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import { Button, Form, Input, Typography, message, Space } from "antd";
 import { useNavigate } from "react-router-dom";
-import { 
-  UserOutlined, 
-  LockOutlined, 
+import {
+  UserOutlined,
+  LockOutlined,
   MailOutlined,
-  ArrowRightOutlined 
+  ArrowRightOutlined,
 } from "@ant-design/icons";
 
 const { Title, Text, Link } = Typography;
@@ -18,11 +18,11 @@ const Register = () => {
 
   // Custom validator for password confirmation
   const validateConfirmPassword = (_, value) => {
-    const password = form.getFieldValue('password');
+    const password = form.getFieldValue("password");
     if (!value || password === value) {
       return Promise.resolve();
     }
-    return Promise.reject('Passwords do not match!');
+    return Promise.reject("Passwords do not match!");
   };
 
   // Form submission handler
@@ -31,11 +31,11 @@ const Register = () => {
     // Simulate API call
     setTimeout(() => {
       setLoading(false);
-      message.success('Registration successful!');
-      navigate('/login');
+      message.success("Registration successful!");
+      navigate("/login");
     }, 1500);
 
-    console.log('Registration values:', values);
+    console.log("Registration values:", values);
   };
 
   return (
@@ -63,7 +63,9 @@ const Register = () => {
           {/* First Name Field */}
           <Form.Item
             name="firstName"
-            rules={[{ required: true, message: 'Please input your first name!' }]}
+            rules={[
+              { required: true, message: "Please input your first name!" },
+            ]}
             className="mb-4"
           >
             <Input
@@ -76,7 +78,9 @@ const Register = () => {
           {/* Last Name Field */}
           <Form.Item
             name="lastName"
-            rules={[{ required: true, message: 'Please input your last name!' }]}
+            rules={[
+              { required: true, message: "Please input your last name!" },
+            ]}
             className="mb-4"
           >
             <Input
@@ -90,8 +94,8 @@ const Register = () => {
           <Form.Item
             name="email"
             rules={[
-              { required: true, message: 'Please input your email!' },
-              { type: 'email', message: 'Please enter a valid email!' }
+              { required: true, message: "Please input your email!" },
+              { type: "email", message: "Please enter a valid email!" },
             ]}
             className="mb-4"
           >
@@ -106,8 +110,8 @@ const Register = () => {
           <Form.Item
             name="password"
             rules={[
-              { required: true, message: 'Please input your password!' },
-              { min: 6, message: 'Password must be at least 6 characters!' }
+              { required: true, message: "Please input your password!" },
+              { min: 6, message: "Password must be at least 6 characters!" },
             ]}
             className="mb-4"
           >
@@ -121,10 +125,10 @@ const Register = () => {
           {/* Confirm Password Field */}
           <Form.Item
             name="confirmPassword"
-            dependencies={['password']}
+            dependencies={["password"]}
             rules={[
-              { required: true, message: 'Please confirm your password!' },
-              { validator: validateConfirmPassword }
+              { required: true, message: "Please confirm your password!" },
+              { validator: validateConfirmPassword },
             ]}
             className="mb-6"
           >

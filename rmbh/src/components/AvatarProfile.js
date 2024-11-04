@@ -1,7 +1,7 @@
 // components/AvatarProfile.js
-import React from 'react';
-import { Avatar, Tooltip } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import React from "react";
+import { Avatar, Tooltip } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 const AvatarProfile = ({ user }) => {
   return (
@@ -13,8 +13,8 @@ const AvatarProfile = ({ user }) => {
           src={user?.profilePicture}
           className="cursor-pointer"
         />
-        <span className="mt-2 text-sm text-gray-600">
-          {user ? `${user.firstName} ${user.lastName}` : 'Guest'}
+        <span className="mt-2 text-sm text-white">
+          {user ? `${user.name}` : "Guest"}
         </span>
       </div>
     </Tooltip>
