@@ -22,6 +22,7 @@ const Login = ({ onLogin }) => {
           name: "Trieu",
           id: "F8D170A5-02F7-4FF4-8C12-4EB83451FCD6",
           avatarUrl: "https://via.placeholder.com/150",
+          classRole: 1,
         };
 
         localStorage.setItem("user", JSON.stringify(userData));
