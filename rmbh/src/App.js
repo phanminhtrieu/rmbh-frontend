@@ -99,20 +99,12 @@ const App = () => {
       </Layout>
 
       {/* Profile Setup Modal */}
-      <Modal
-        title="Edit Profile"
-        open={isProfileModalVisible}
-        onCancel={handleProfileModalCancel}
-        footer={null}
-        width={800}
-        style={{ padding: 0 }} // Apply inline style for padding
-      >
-        <SetupProfile
+      <SetupProfile
+        visible={isProfileModalVisible}
           initialValues={user}
           onSubmit={handleProfileUpdate}
           onCancel={handleProfileModalCancel}
         />
-      </Modal>
     </Layout>
   );
 

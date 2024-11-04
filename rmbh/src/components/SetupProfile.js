@@ -1,206 +1,120 @@
-// pages/SetupProfile.js
-import React, { useState } from "react";
-import { 
-  Button, 
-  Form, 
-  Input, 
-  Typography, 
-  message, 
-  Upload, 
-  Spin 
-} from "antd";
-import { useNavigate } from "react-router-dom";
-import { 
-  UserOutlined, 
-  UploadOutlined,
-  SaveOutlined,
-  LoadingOutlined 
-} from "@ant-design/icons";
+import React, { useState } from 'react';
+import { Modal, Form, Input, Button, message } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
-const { Title, Text } = Typography;
-const { TextArea } = Input;
-
-const SetupProfile = () => {
+const SetUpProfileModal = ({ visible, onCancel, onSuccess }) => {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [uploadLoading, setUploadLoading] = useState(false);
-  const navigate = useNavigate();
+  const [fileList, setFileList] = useState([]);
 
-  // Handle image upload before submission
-  const handleImageUpload = async (info) => {
-    if (info.file.status === 'uploading') {
-      setUploadLoading(true);
-      return;
-    }
-    
-    if (info.file.status === 'done') {
-      // Get base64 URL for preview
-      getBase64(info.file.originFileObj, (url) => {
-        setUploadLoading(false);
-        setImageUrl(url);
+  // API endpoint for saving the profile
+  const API_URL = 'https://localhost:7109/api/profile'; // Adjust the endpoint accordingly
+
+  // Handle form submission
+  const handleSubmit = async (values) => {
+    try {
+      setLoading(true);
+      // Prepare form data for submission, including the file
+      const formData = new FormData();
+      formData.append('lastName', values.lastName);
+      formData.append('firstName', values.firstName);
+      formData.append('bio', values.bio);
+      if (fileList.length > 0) {
+        formData.append('profilePicture', fileList[0].originFileObj);
+      }
+
+      const response = await axios.post(API_URL, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
-    }
-  };
 
-  // Convert file to base64 for preview
-  const getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  };
-
-  // Validate file before upload
-  const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG files!');
-    }
-
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must be smaller than 2MB!');
-    }
-
-    return isJpgOrPng && isLt2M;
-  };
-
-  // Form submission handler
-  const onFinish = (values) => {
-    setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
+      if (response.status === 200) {
+        message.success('Profile updated successfully!');
+        form.resetFields();
+        setFileList([]);
+        onSuccess();
+        onCancel();
+      }
+    } catch (error) {
+      message.error(error.response?.data?.message || 'Failed to save profile');
+    } finally {
       setLoading(false);
-      message.success('Profile setup completed!');
-      navigate('/dashboard'); // Navigate to dashboard after setup
-    }, 1500);
-
-    console.log('Profile values:', { ...values, profilePicture: imageUrl });
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-100 via-purple-50 to-purple-100 flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl p-8 space-y-8 transition-all duration-300 hover:shadow-3xl my-8">
-        {/* Header Section */}
-        <div className="text-center space-y-2">
-          <h2 className="text-3xl font-bold text-gray-800 tracking-tight">
-            Set Up Your Profile
-          </h2>
-          <p className="text-gray-500 text-sm">
-            Let's personalize your profile to get started
-          </p>
-        </div>
-
-        {/* Profile Setup Form */}
-        <Form
-          name="profileSetup"
-          onFinish={onFinish}
-          layout="vertical"
-          size="large"
-          className="space-y-6"
+    <Modal
+      title="Set Up Your Profile"
+      open={visible}
+      onCancel={onCancel}
+      footer={null}
+      className="rounded-lg"
+      maskClassName="bg-gray-800/50"
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleSubmit}
+        className="mt-4"
+      >
+        {/* Last Name Field */}
+        <Form.Item
+          name="lastName"
+          label="Last Name"
+          rules={[{ required: true, message: 'Please enter your last name' }]}
         >
-          {/* Profile Picture Upload */}
-          <div className="flex justify-center mb-8">
-            <div className="space-y-4">
-              <div className="flex justify-center">
-                {imageUrl ? (
-                  <div className="relative">
-                    <img
-                      src={imageUrl}
-                      alt="Profile"
-                      className="w-32 h-32 rounded-full object-cover border-4 border-blue-100"
-                    />
-                    {uploadLoading && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full">
-                        <Spin indicator={<LoadingOutlined style={{ fontSize: 24, color: 'white' }} />} />
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center border-4 border-blue-100">
-                    <UserOutlined className="text-4xl text-gray-400" />
-                  </div>
-                )}
-              </div>
-              <Upload
-                name="avatar"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76" // Replace with your upload endpoint
-                beforeUpload={beforeUpload}
-                onChange={handleImageUpload}
-              >
-                <Button 
-                  icon={<UploadOutlined />}
-                  className="flex items-center"
-                >
-                  Upload Photo
-                </Button>
-              </Upload>
-            </div>
-          </div>
+          <Input placeholder="Enter your last name" className="rounded-md" />
+        </Form.Item>
 
-          {/* Name Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* First Name Field */}
-            <Form.Item
-              name="firstName"
-              label="First Name"
-              rules={[{ required: true, message: 'Please input your first name!' }]}
-            >
-              <Input
-                placeholder="First Name"
-                className="h-12 rounded-lg hover:border-blue-500 focus:border-blue-500 transition-colors duration-300"
-              />
-            </Form.Item>
+        {/* First Name Field */}
+        <Form.Item
+          name="firstName"
+          label="First Name"
+          rules={[{ required: true, message: 'Please enter your first name' }]}
+        >
+          <Input placeholder="Enter your first name" className="rounded-md" />
+        </Form.Item>
 
-            {/* Last Name Field */}
-            <Form.Item
-              name="lastName"
-              label="Last Name"
-              rules={[{ required: true, message: 'Please input your last name!' }]}
-            >
-              <Input
-                placeholder="Last Name"
-                className="h-12 rounded-lg hover:border-blue-500 focus:border-blue-500 transition-colors duration-300"
-              />
-            </Form.Item>
-          </div>
+        {/* Bio Field */}
+        <Form.Item
+          name="bio"
+          label="Bio"
+          rules={[{ required: true, message: 'Please enter your bio' }]}
+        >
+          <Input.TextArea placeholder="Write a short bio..." className="rounded-md" rows={4} />
+        </Form.Item>
 
-          {/* Bio Field */}
-          <Form.Item
-            name="bio"
-            label="Bio"
-            rules={[
-              { required: true, message: 'Please write a short bio!' },
-              { max: 500, message: 'Bio cannot be longer than 500 characters!' }
-            ]}
-          >
-            <TextArea
-              placeholder="Tell us about yourself..."
-              rows={4}
-              className="rounded-lg hover:border-blue-500 focus:border-blue-500 transition-colors duration-300"
-              maxLength={500}
-              showCount
-            />
-          </Form.Item>
+        {/* Profile Picture Upload */}
+        <Form.Item label="Profile Picture">
+          <Input 
+            type="file"
+            accept="image/*"
+            onChange={(e) => setFileList(e.target.files)}
+            className="rounded-md"
+          />
+        </Form.Item>
 
-          {/* Submit Button */}
-          <Form.Item className="mb-0">
+        {/* Submit Button */}
+        <Form.Item className="mb-0">
+          <div className="flex justify-end space-x-2">
+            <Button onClick={onCancel} className="hover:bg-gray-100">
+              Cancel
+            </Button>
             <Button
               type="primary"
               htmlType="submit"
               loading={loading}
-              icon={<SaveOutlined />}
-              className="w-full h-12 bg-blue-600 hover:bg-blue-700 rounded-lg text-lg font-semibold transition-all duration-300 flex items-center justify-center"
+              className="bg-blue-500 hover:bg-blue-600"
             >
               Save Profile
             </Button>
-          </Form.Item>
-        </Form>
-      </div>
-    </div>
+          </div>
+        </Form.Item>
+      </Form>
+    </Modal>
   );
 };
 
-export default SetupProfile;
+export default SetUpProfileModal;
