@@ -1,15 +1,24 @@
-import React from "react";
-import { Avatar, Typography } from "antd";
+// components/AvatarProfile.js
+import React from 'react';
+import { Avatar, Tooltip } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 
-const { Title } = Typography;
-
-const AvatarProfile = ({ user }) => (
-  <div className="flex flex-col items-center p-4">
-    {user && <Avatar size={64} src={user.avatarUrl} />}
-    <Title level={5} style={{ color: "white" }} className="mt-2">
-      {user ? user.name : "Guest"}
-    </Title>
-  </div>
-);
+const AvatarProfile = ({ user }) => {
+  return (
+    <Tooltip title="Click to edit profile">
+      <div className="flex flex-col items-center p-4 hover:bg-gray-100 transition-colors duration-300">
+        <Avatar
+          size={64}
+          icon={<UserOutlined />}
+          src={user?.profilePicture}
+          className="cursor-pointer"
+        />
+        <span className="mt-2 text-sm text-gray-600">
+          {user ? `${user.firstName} ${user.lastName}` : 'Guest'}
+        </span>
+      </div>
+    </Tooltip>
+  );
+};
 
 export default AvatarProfile;
