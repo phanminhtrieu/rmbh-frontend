@@ -18,7 +18,8 @@ const Login = ({ onLogin }) => {
       setTimeout(() => {
         setLoading(false);
         const userData = {
-          name: username,
+          email: username,
+          name: "Trieu",
           id: "F8D170A5-02F7-4FF4-8C12-4EB83451FCD6",
           avatarUrl: "https://via.placeholder.com/150",
         };

@@ -7,16 +7,11 @@ const ClassMenu = ({ selectedMenu, setSelectedMenu }) => {
     setSelectedMenu(e.key); // Gọi hàm cập nhật selectedMenu
   };
 
-  return (
-    <div className="border-t">
-      <Menu
-        mode="horizontal"
-        selectedKeys={[selectedMenu]}
-        onClick={handleMenuClick}
-        className="flex justify-between bg-[]"
-      >
-        <Menu.Item
-          key="About"
+  // Định nghĩa các mục menu
+  const items = [
+    {
+      label: (
+        <span
           className={`text-center w-[30%] ${
             selectedMenu === "About"
               ? "font-bold text-blue-600"
@@ -24,9 +19,13 @@ const ClassMenu = ({ selectedMenu, setSelectedMenu }) => {
           }`}
         >
           About
-        </Menu.Item>
-        <Menu.Item
-          key="Deck"
+        </span>
+      ),
+      key: "About",
+    },
+    {
+      label: (
+        <span
           className={`text-center w-[30%] ${
             selectedMenu === "Deck"
               ? "font-bold text-blue-600"
@@ -34,9 +33,13 @@ const ClassMenu = ({ selectedMenu, setSelectedMenu }) => {
           }`}
         >
           Deck (1/n selected)
-        </Menu.Item>
-        <Menu.Item
-          key="Learners"
+        </span>
+      ),
+      key: "Deck",
+    },
+    {
+      label: (
+        <span
           className={`text-center w-[30%] ${
             selectedMenu === "Learners"
               ? "font-bold text-blue-600"
@@ -44,8 +47,21 @@ const ClassMenu = ({ selectedMenu, setSelectedMenu }) => {
           }`}
         >
           Learners
-        </Menu.Item>
-      </Menu>
+        </span>
+      ),
+      key: "Learners",
+    },
+  ];
+
+  return (
+    <div className="border-t">
+      <Menu
+        mode="horizontal"
+        selectedKeys={[selectedMenu]}
+        onClick={handleMenuClick}
+        items={items} // Sử dụng items thay vì Menu.Item
+        className="flex justify-between bg-[]"
+      />
     </div>
   );
 };

@@ -1,65 +1,66 @@
-// SidebarItem.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu, Avatar } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import AddClassModal from "./ClassDetails/AddClassModal";
+import axios from "axios";
 
-const SidebarItem = ({
-  classes,
-  selectedClass,
-  handleClassSelect,
-  onAddClass,
-}) => {
-  // Add state for modal visibility
-  const [isModalVisible, setIsModalVisible] = useState(false);
+const SidebarItem = ({ userId, handleClassSelect, onAddClass }) => {
+  const [classes, setClasses] = useState([]); // State để lưu danh sách lớp
+  const [loading, setLoading] = useState(true); // State để quản lý trạng thái loading
 
-  // Handle modal success
-  const handleModalSuccess = () => {
-    onAddClass(); // Refresh the classes list
-    setIsModalVisible(false);
+  // Hàm gọi API để lấy danh sách lớp
+  const fetchClasses = async () => {
+    try {
+      const response = await axios.get(
+        `https://localhost:7109/api/frontend/Classes/user/${userId}`
+      );
+      setClasses(response.data); // Lưu danh sách lớp vào state
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+    } finally {
+      setLoading(false); // Đặt loading thành false sau khi gọi API
+    }
   };
 
-  // Handle avatar click
-  const handleAvatarClick = (e) => {
-    e.stopPropagation(); // Prevent event bubbling
-    setIsModalVisible(true);
-  };
+  // Sử dụng useEffect để gọi fetchClasses khi component mount
+  useEffect(() => {
+    fetchClasses();
+  }, [userId]); // Chỉ gọi lại khi userId thay đổi
+
+  // Định nghĩa các mục menu
+  const items = [
+    {
+      key: "myClassesGroup",
+      label: (
+        <div className="flex justify-around items-center mb-2">
+          <span className="text-white mr-14">My classes</span>
+          <Avatar
+            icon={<PlusOutlined />}
+            size={24}
+            onClick={onAddClass}
+            className="bg-blue-500 cursor-pointer"
+          />
+        </div>
+      ),
+    },
+    ...(loading
+      ? [{ key: "loading", label: "Loading..." }]
+      : classes.map((cls) => ({
+          key: cls.id.toString(), // Khóa từ ID của lớp
+          label: (
+            <div onClick={() => handleClassSelect(cls)}>
+              {cls.title} {/* Sử dụng title từ ClassDto */}
+            </div>
+          ),
+        }))),
+  ];
 
   return (
-    <>
-      <Menu
-        theme="dark"
-        mode="inline"
-        selectedKeys={selectedClass ? [selectedClass.id.toString()] : []}
-      >
-        <Menu.ItemGroup
-          title={
-            <div className="flex justify-between items-center">
-              <span className="text-white">My classes</span>
-              <Avatar
-                icon={<PlusOutlined />}
-                size={24}
-                onClick={handleAvatarClick}
-                className="bg-blue-500 cursor-pointer hover:bg-blue-600 transition-colors"
-              />
-            </div>
-          }
-        >
-          {classes.map((cls) => (
-            <Menu.Item key={cls.id} onClick={() => handleClassSelect(cls)}>
-              {cls.name}
-            </Menu.Item>
-          ))}
-        </Menu.ItemGroup>
-      </Menu>
-
-      {/* Add Class Modal */}
-      <AddClassModal
-        visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-        onSuccess={handleModalSuccess}
-      />
-    </>
+    <Menu
+      theme="dark"
+      mode="inline"
+      selectedKeys={classes.length > 0 ? [classes[0].id.toString()] : []}
+      items={items}
+    />
   );
 };
 
