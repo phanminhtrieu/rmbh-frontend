@@ -1,0 +1,22 @@
+/* Add these styles to your global CSS file */
+.ant-input-affix-wrapper {
+    border-radius: 0.5rem !important;
+  }
+  
+  .ant-form-item {
+    margin-bottom: 1rem !important;
+  }
+  
+  .ant-btn-primary {
+    background-color: #2563eb !important;
+  }
+  
+  .ant-btn-primary:hover {
+    background-color: #1d4ed8 !important;
+  }
+  
+  .ant-input-affix-wrapper:focus,
+  .ant-input-affix-wrapper-focused {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
+  }

@@ -1,9 +1,10 @@
 // pages/Login.js
 import React, { useState } from "react";
-import { Button, Form, Input, Typography } from "antd";
+import { Button, Form, Input, Typography, message, Space } from "antd";
 import { useNavigate } from "react-router-dom";
+import { UserOutlined, LockOutlined, LoginOutlined } from "@ant-design/icons";
 
-const { Link } = Typography;
+const { Title, Text, Link } = Typography;
 
 const Login = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
@@ -11,10 +12,8 @@ const Login = ({ onLogin }) => {
 
   const onFinish = (values) => {
     setLoading(true);
-    // Logic kiểm tra thông tin đăng nhập
     const { username, password } = values;
 
-    // Kiểm tra thông tin đăng nhập (có thể thay đổi theo yêu cầu thực tế)
     if (username === "trieu" && password === "1") {
       setTimeout(() => {
         setLoading(false);
@@ -24,44 +23,89 @@ const Login = ({ onLogin }) => {
           avatarUrl: "https://via.placeholder.com/150",
         };
 
-        // Lưu thông tin người dùng vào local storage
         localStorage.setItem("user", JSON.stringify(userData));
-
-        onLogin(userData); // Cập nhật thông tin người dùng
-        navigate("/"); // Điều hướng đến trang chính sau khi đăng nhập thành công
+        message.success("Login successful!");
+        onLogin(userData);
+        navigate("/");
       }, 1000);
     } else {
       setLoading(false);
-      alert("Invalid username or password!"); // Hiển thị thông báo lỗi nếu thông tin không hợp lệ
+      message.error("Invalid username or password!");
     }
   };
 
   return (
-    <div style={{ maxWidth: 300, margin: "auto", paddingTop: "50px" }}>
-      <Form name="login" onFinish={onFinish}>
-        <Form.Item
-          name="username"
-          rules={[{ required: true, message: "Please input your username!" }]}
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 via-purple-50 to-purple-100 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 space-y-8 transition-all duration-300 hover:shadow-3xl">
+        <div className="text-center space-y-2">
+          <h2 className="text-3xl font-bold text-gray-800 tracking-tight">
+            Welcome Back!
+          </h2>
+          <p className="text-gray-500 text-sm">
+            Please sign in to access your account
+          </p>
+        </div>
+
+        <Form
+          name="login"
+          onFinish={onFinish}
+          layout="vertical"
+          size="large"
+          className="space-y-6"
         >
-          <Input placeholder="Username" />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input.Password placeholder="Password" />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            Log in
-          </Button>
-        </Form.Item>
-        <Form.Item>
-          <Link onClick={() => navigate("/register")}>
-            Don't have an account? Register now!
-          </Link>
-        </Form.Item>
-      </Form>
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: "Please input your username!" }]}
+            className="mb-4"
+          >
+            <Input
+              prefix={<UserOutlined className="text-gray-400" />}
+              placeholder="Username"
+              className="h-12 rounded-lg hover:border-blue-500 focus:border-blue-500 transition-colors duration-300"
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "Please input your password!" }]}
+            className="mb-2"
+          >
+            <Input.Password
+              prefix={<LockOutlined className="text-gray-400" />}
+              placeholder="Password"
+              className="h-12 rounded-lg hover:border-blue-500 focus:border-blue-500 transition-colors duration-300"
+            />
+          </Form.Item>
+
+          <div className="flex justify-end mb-6">
+            <Link className="text-sm text-blue-600 hover:text-blue-800 transition-colors duration-300">
+              Forgot password?
+            </Link>
+          </div>
+
+          <Form.Item className="mb-6">
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+              icon={<LoginOutlined />}
+              className="w-full h-12 bg-blue-600 hover:bg-blue-700 rounded-lg text-lg font-semibold transition-all duration-300 flex items-center justify-center"
+            >
+              Sign In
+            </Button>
+          </Form.Item>
+
+          <div className="text-center space-y-2 pt-4 border-t border-gray-100">
+            <p className="text-gray-500 text-sm">Don't have an account?</p>
+            <Link
+              onClick={() => navigate("/register")}
+              className="text-blue-600 hover:text-blue-800 text-base font-medium transition-colors duration-300 inline-block"
+            >
+              Create an account
+            </Link>
+          </div>
+        </Form>
+      </div>
     </div>
   );
 };
