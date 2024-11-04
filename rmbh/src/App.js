@@ -14,6 +14,8 @@ import SidebarItem from "./components/SidebarItem";
 import HeaderContent from "./components/HeaderContent";
 import BodyContent from "./components/BodyContent";
 import SetupProfile from "./components/SetupProfile";
+import EditClassModal from "./components/EditClassModal";
+import DeleteClassPopup from "./components/DeleteClassPopup";
 
 const App = () => {
   // State management
@@ -60,7 +62,24 @@ const App = () => {
     setSelectedClass(cls);
   };
 
-  const handleEllipsisClick = () => {};
+  const handleEllipsisClick = (action) => {
+    switch(action) {
+      case 'edit':
+        // Logic to handle class editing
+        console.log('Edit class clicked');
+        break;
+      case 'delete':
+        // Logic to handle class deletion
+        console.log('Delete class clicked');
+        break;
+      case 'quit':
+        // Logic to handle quitting the class
+        console.log('Quit class clicked');
+        break;
+      default:
+        break;
+    }
+  };
 
   // Main layout structure
   const layout = (
@@ -78,14 +97,15 @@ const App = () => {
         <SidebarItem
           selectedClass={selectedClass}
           handleClassSelect={handleClassSelect}
-          userId={user?.id} // Truyền userId từ local storage vào
+          userId={user?.id} // Pass userId from local storage into SidebarItem
         />
       </Layout.Sider>
 
       <Layout>
         <HeaderContent
           selectedClass={selectedClass}
-          handleEllipsisClick={handleEllipsisClick}
+          user={user} // Pass user object to HeaderContent
+          handleEllipsisClick={handleEllipsisClick} // Pass the click handler
           selectedMenu={selectedMenu}
           setSelectedMenu={setSelectedMenu}
         />
@@ -101,17 +121,22 @@ const App = () => {
       {/* Profile Setup Modal */}
       <SetupProfile
         visible={isProfileModalVisible}
-          initialValues={user}
-          onSubmit={handleProfileUpdate}
-          onCancel={handleProfileModalCancel}
-        />
+        initialValues={user}
+        onSubmit={handleProfileUpdate}
+        onCancel={handleProfileModalCancel}
+      /> 
+
+      {/* Delete Class Popup */}
+      <DeleteClassPopup
+        visible={true}
+      />
     </Layout>
   );
 
   const handleLogin = (userData) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-    console.log("Logged in user:", userData); // Kiểm tra dữ liệu người dùng
+    console.log("Logged in user:", userData); // Check user data
   };
 
   return (
@@ -134,4 +159,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default App; // Exporting the App component
