@@ -5,18 +5,35 @@ import { useNavigate } from "react-router-dom";
 
 const { Link } = Typography;
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const onFinish = (values) => {
     setLoading(true);
     // Logic kiểm tra thông tin đăng nhập
-    // Giả sử thông tin đăng nhập thành công
-    setTimeout(() => {
+    const { username, password } = values;
+
+    // Kiểm tra thông tin đăng nhập (có thể thay đổi theo yêu cầu thực tế)
+    if (username === "trieu" && password === "1") {
+      setTimeout(() => {
+        setLoading(false);
+        const userData = {
+          name: username,
+          id: "1B8DF37B-80CF-4182-8CC9-12DE166B46E2",
+          avatarUrl: "https://via.placeholder.com/150",
+        };
+
+        // Lưu thông tin người dùng vào local storage
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        onLogin(userData); // Cập nhật thông tin người dùng
+        navigate("/"); // Điều hướng đến trang chính sau khi đăng nhập thành công
+      }, 1000);
+    } else {
       setLoading(false);
-      navigate("/dashboard"); // Điều hướng đến Dashboard sau khi đăng nhập thành công
-    }, 1000);
+      alert("Invalid username or password!"); // Hiển thị thông báo lỗi nếu thông tin không hợp lệ
+    }
   };
 
   return (
