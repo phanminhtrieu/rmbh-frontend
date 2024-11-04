@@ -1,7 +1,7 @@
 import React from "react";
 import StudyButton from "../StudyButton";
 
-const ClassInfo = ({ selectedClass, user, handleEllipsisClick }) => {
+const ClassInfo = ({ selectedClass, handleEllipsisClick }) => {
   const defaultLogo =
     "https://unsplash.com/photos/a-table-with-a-lamp-and-books-on-it-Vjc2-7JhFbg"; // URL ảnh logo mặc định
   const logoUrl = selectedClass.logo || defaultLogo; // Sử dụng logo của lớp hoặc ảnh mặc định nếu không có
@@ -14,10 +14,12 @@ const ClassInfo = ({ selectedClass, user, handleEllipsisClick }) => {
         // alt={`${selectedClass.name} logo`}
       />
       <div className="flex flex-col w-[500px]">
-        <div className="text-2xl font-bold mt-2">{selectedClass.name}</div>
+        <div className="text-2xl font-bold mt-2">{selectedClass.title}</div>
         <div className="text-lg mb-6">
           <span>By: </span>
-          <span className="font-bold">{user ? user.name : "N/A"}</span>
+          <span className="font-bold">
+            {selectedClass ? selectedClass.owner : "N/A"}
+          </span>
         </div>
         <StudyButton handleEllipsisClick={handleEllipsisClick} />
       </div>

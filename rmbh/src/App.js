@@ -56,7 +56,10 @@ const App = () => {
     setIsProfileModalVisible(false);
   };
 
-  const handleClassSelect = (cls) => setSelectedClass(cls);
+  const handleClassSelect = (cls) => {
+    setSelectedClass(cls);
+  };
+
   const handleEllipsisClick = () => {};
 
   // Main layout structure
@@ -75,19 +78,21 @@ const App = () => {
         <SidebarItem
           selectedClass={selectedClass}
           handleClassSelect={handleClassSelect}
-          userId={user?.id} // Truyền userId vào SidebarItem
+          userId={user?.id} // Truyền userId từ local storage vào
         />
       </Layout.Sider>
 
       <Layout>
         <HeaderContent
           selectedClass={selectedClass}
-          user={user}
           handleEllipsisClick={handleEllipsisClick}
           selectedMenu={selectedMenu}
           setSelectedMenu={setSelectedMenu}
         />
-        <BodyContent selectedMenu={selectedMenu} />
+        <BodyContent
+          selectedClass={selectedClass}
+          selectedMenu={selectedMenu}
+        />
         <Layout.Footer style={{ textAlign: "center" }}>
           Remember helper
         </Layout.Footer>

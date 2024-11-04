@@ -2,56 +2,9 @@ import React from "react";
 import { Menu } from "antd";
 
 const ClassMenu = ({ selectedMenu, setSelectedMenu }) => {
-  // Nhận selectedMenu và setSelectedMenu từ props
   const handleMenuClick = (e) => {
-    setSelectedMenu(e.key); // Gọi hàm cập nhật selectedMenu
+    setSelectedMenu(e.key);
   };
-
-  // Định nghĩa các mục menu
-  const items = [
-    {
-      label: (
-        <span
-          className={`text-center w-[30%] ${
-            selectedMenu === "About"
-              ? "font-bold text-blue-600"
-              : "text-gray-500"
-          }`}
-        >
-          About
-        </span>
-      ),
-      key: "About",
-    },
-    {
-      label: (
-        <span
-          className={`text-center w-[30%] ${
-            selectedMenu === "Deck"
-              ? "font-bold text-blue-600"
-              : "text-gray-500"
-          }`}
-        >
-          Deck (1/n selected)
-        </span>
-      ),
-      key: "Deck",
-    },
-    {
-      label: (
-        <span
-          className={`text-center w-[30%] ${
-            selectedMenu === "Learners"
-              ? "font-bold text-blue-600"
-              : "text-gray-500"
-          }`}
-        >
-          Learners
-        </span>
-      ),
-      key: "Learners",
-    },
-  ];
 
   return (
     <div className="border-t">
@@ -59,9 +12,41 @@ const ClassMenu = ({ selectedMenu, setSelectedMenu }) => {
         mode="horizontal"
         selectedKeys={[selectedMenu]}
         onClick={handleMenuClick}
-        items={items} // Sử dụng items thay vì Menu.Item
-        className="flex justify-between bg-[]"
-      />
+        className="flex justify-between"
+      >
+        <Menu.Item
+          key="About"
+          className={`w-[30%] text-center ${
+            selectedMenu === "About"
+              ? "font-bold text-blue-600"
+              : "text-gray-500"
+          }`}
+        >
+          About
+        </Menu.Item>
+
+        <Menu.Item
+          key="Deck"
+          className={`w-[30%] text-center ${
+            selectedMenu === "Deck"
+              ? "font-bold text-blue-600"
+              : "text-gray-500"
+          }`}
+        >
+          Deck (1/n selected)
+        </Menu.Item>
+
+        <Menu.Item
+          key="Learners"
+          className={`w-[30%] text-center ${
+            selectedMenu === "Learners"
+              ? "font-bold text-blue-600"
+              : "text-gray-500"
+          }`}
+        >
+          Learners
+        </Menu.Item>
+      </Menu>
     </div>
   );
 };
