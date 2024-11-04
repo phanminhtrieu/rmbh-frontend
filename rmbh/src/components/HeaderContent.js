@@ -11,28 +11,6 @@ const HeaderContent = ({
   selectedMenu,
   setSelectedMenu,
 }) => {
-  const [classData, setClassData] = useState(null); // Trạng thái lưu dữ liệu lớp
-
-  useEffect(() => {
-    if (selectedClass) {
-      const fetchClassData = async () => {
-        try {
-          // Giả lập dữ liệu lớp với logo mặc định nếu không có
-          const classDetails = {
-            ...selectedClass,
-            logo: selectedClass.logo,
-            description: "Class description here", // Giả lập mô tả lớp
-          };
-          setClassData(classDetails);
-        } catch (error) {
-          console.error("Lỗi khi lấy dữ liệu lớp:", error);
-          setClassData({ ...selectedClass });
-        }
-      };
-      fetchClassData();
-    }
-  }, [selectedClass]);
-
   return (
     <Layout.Header
       className="h-[255px] p-0 flex items-center justify-between overflow-hidden"
@@ -40,14 +18,13 @@ const HeaderContent = ({
         background: theme.useToken().token.colorBgContainer,
       }}
     >
-      {classData ? (
+      {selectedClass ? (
         <ClassDetail
-          selectedClass={classData}
-          user={user}
+          selectedClass={selectedClass}
           handleEllipsisClick={handleEllipsisClick}
           selectedMenu={selectedMenu}
           setSelectedMenu={setSelectedMenu}
-          logo={classData.logo} // Truyền logo vào ClassDetail
+          logo={selectedClass.logo} // Truyền logo vào ClassDetail
         />
       ) : (
         <Title level={4}>Select a class</Title>
