@@ -7,15 +7,27 @@ import axios from "axios";
 const AddClassModal = ({ visible, onCancel, onSuccess }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  
+
   // API endpoint for creating a new class
-  const API_URL = 'https://localhost:7109/api/classes';
+  const API_URL = "https://localhost:7109/api/frontend/classes/create";
 
   // Handle form submission
   const handleSubmit = async (values) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const createdUserId = user?.id;
+
+    // Cập nhật giá trị request
+    const requestData = {
+      title: values.className,
+      description: values.description,
+      createdUserId, // Thêm createdUserId
+    };
+
+    console.log(requestData); // Kiểm tra dữ liệu trước khi gửi
+
     try {
       setLoading(true);
-      const response = await axios.post(API_URL, values);
+      const response = await axios.post(API_URL, requestData);
 
       if (response.status === 200) {
         message.success("Class created successfully!");
@@ -167,11 +179,7 @@ const SidebarItem = ({ userId, handleClassSelect }) => {
       ? [{ key: "loading", label: "Loading..." }]
       : classes.map((cls) => ({
           key: cls.id.toString(),
-          label: (
-            <div onClick={() => handleSelect(cls)}>
-              {cls.title}
-            </div>
-          ),
+          label: <div onClick={() => handleSelect(cls)}>{cls.title}</div>,
         }))),
   ];
 

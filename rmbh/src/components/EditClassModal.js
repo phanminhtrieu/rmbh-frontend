@@ -1,16 +1,22 @@
 // EditClassModal.jsx
 import axios from "axios"; // Import axios
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal, Form, Input, message } from "antd";
 
 // EditClassModal Component
 const EditClassModal = ({ open, onCancel, selectedClass }) => {
-  console.log(selectedClass);
-
   const [form] = Form.useForm();
 
+  useEffect(() => {
+    if (selectedClass) {
+      form.setFieldsValue({
+        className: selectedClass.title, // Cập nhật giá trị className
+        description: selectedClass.description, // Cập nhật giá trị description
+      });
+    }
+  }, [selectedClass, form]); // Chạy lại effect khi selectedClass thay đổi
+
   const handleSubmit = async (values) => {
-    console.log(values);
     try {
       const userId = localStorage.getItem("userId"); // Lấy userId từ localStorage
 
@@ -25,7 +31,7 @@ const EditClassModal = ({ open, onCancel, selectedClass }) => {
       // Gửi request đến backend để cập nhật thông tin lớp
       const response = await axios.put(
         `https://localhost:7109/api/frontend/Classes/update/${selectedClass?.id}`,
-        updatedClass // Gửi đối tượng đã cập nhật
+        updatedClass
       );
 
       if (response.status === 200) {
@@ -40,21 +46,8 @@ const EditClassModal = ({ open, onCancel, selectedClass }) => {
   };
 
   return (
-    <Modal
-      title="Edit Class"
-      open={open} // Use the 'open' prop instead of 'visible'
-      onCancel={onCancel}
-      footer={null}
-    >
-      <Form
-        form={form}
-        layout="vertical"
-        initialValues={{
-          className: selectedClass?.title,
-          description: selectedClass?.description,
-        }}
-        onFinish={handleSubmit}
-      >
+    <Modal title="Edit Class" open={open} onCancel={onCancel} footer={null}>
+      <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item
           name="className"
           label="Class Name"

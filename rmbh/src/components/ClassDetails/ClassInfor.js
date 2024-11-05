@@ -1,3 +1,5 @@
+import { UserOutlined } from "@ant-design/icons";
+import { Avatar } from "antd";
 import React from "react";
 import StudyButton from "../StudyButton";
 
@@ -8,10 +10,11 @@ const ClassInfo = ({ selectedClass }) => {
 
   return (
     <div className="flex space-x-10">
-      <img
-        className="w-36 h-36 rounded-full"
+      <Avatar
+        size={64}
+        icon={<UserOutlined />}
         src={logoUrl}
-        // alt={`${selectedClass.name} logo`}
+        className="cursor-pointer"
       />
       <div className="flex flex-col w-[500px]">
         <div className="text-2xl font-bold mt-2">{selectedClass.title}</div>

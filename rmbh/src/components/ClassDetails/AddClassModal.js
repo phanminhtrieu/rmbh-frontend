@@ -1,30 +1,36 @@
 // AddClassModal.jsx
-import React, { useState } from 'react';
-import { Modal, Form, Input, Button, message } from 'antd';
-import { BookOutlined, EditOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import React, { useState } from "react";
+import { Modal, Form, Input, Button, message } from "antd";
+import { BookOutlined, EditOutlined } from "@ant-design/icons";
+import axios from "axios";
 
 const AddClassModal = ({ visible, onCancel, onSuccess }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
-  // API endpoint for creating a new class
-  const API_URL = 'https://your-api-endpoint/api/classes';
+  console.log(axios.defaults.baseURL);
 
-  // Handle form submission
+  // API endpoint for creating a new class
+  // const API_URL = "https://localhost:7109/api/frontend/Classes";
+
   const handleSubmit = async (values) => {
+    console.log("submit");
+
     try {
       setLoading(true);
-      const response = await axios.post(API_URL, values);
-      
+      const response = await axios.post(
+        "https://localhost:7109/api/frontend/Classes",
+        values
+      );
+
       if (response.status === 200) {
-        message.success('Class created successfully!');
+        message.success("Class created successfully!");
         form.resetFields();
         onSuccess?.();
         onCancel();
       }
     } catch (error) {
-      message.error(error.response?.data?.message || 'Failed to create class');
+      message.error(error.response?.data?.message || "Failed to create class");
     } finally {
       setLoading(false);
     }
@@ -55,11 +61,11 @@ const AddClassModal = ({ visible, onCancel, onSuccess }) => {
           name="className"
           label="Class Name"
           rules={[
-            { required: true, message: 'Please enter a class name' },
-            { min: 3, message: 'Class name must be at least 3 characters' }
+            { required: true, message: "Please enter a class name" },
+            { min: 3, message: "Class name must be at least 3 characters" },
           ]}
         >
-          <Input 
+          <Input
             prefix={<BookOutlined className="text-gray-400" />}
             placeholder="Enter class name"
             className="rounded-md"
@@ -67,10 +73,7 @@ const AddClassModal = ({ visible, onCancel, onSuccess }) => {
         </Form.Item>
 
         {/* Description Field */}
-        <Form.Item
-          name="description"
-          label="Description (Optional)"
-        >
+        <Form.Item name="description" label="Description (Optional)">
           <Input.TextArea
             prefix={<EditOutlined className="text-gray-400" />}
             placeholder="Enter class description"
@@ -82,13 +85,10 @@ const AddClassModal = ({ visible, onCancel, onSuccess }) => {
         {/* Submit Button */}
         <Form.Item className="mb-0">
           <div className="flex justify-end space-x-2">
-            <Button 
-              onClick={onCancel}
-              className="hover:bg-gray-100"
-            >
+            <Button onClick={onCancel} className="hover:bg-gray-100">
               Cancel
             </Button>
-            <Button 
+            <Button
               type="primary"
               htmlType="submit"
               loading={loading}
