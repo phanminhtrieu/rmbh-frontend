@@ -14,7 +14,7 @@ const AvatarProfile = ({ user }) => {
           className="cursor-pointer"
         />
         <span className="mt-2 text-sm hover:text-black-500 text-white">
-          {user ? `${user.name}` : "Guest"}
+          {user ? `${user.fisrtName}` : "Guest"}
         </span>
       </div>
     </Tooltip>

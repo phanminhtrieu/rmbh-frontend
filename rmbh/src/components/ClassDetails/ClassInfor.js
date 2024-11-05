@@ -1,7 +1,7 @@
 import React from "react";
 import StudyButton from "../StudyButton";
 
-const ClassInfo = ({ selectedClass, handleEllipsisClick }) => {
+const ClassInfo = ({ selectedClass }) => {
   const defaultLogo =
     "https://unsplash.com/photos/a-table-with-a-lamp-and-books-on-it-Vjc2-7JhFbg"; // URL ảnh logo mặc định
   const logoUrl = selectedClass.logo || defaultLogo; // Sử dụng logo của lớp hoặc ảnh mặc định nếu không có
@@ -21,7 +21,7 @@ const ClassInfo = ({ selectedClass, handleEllipsisClick }) => {
             {selectedClass ? selectedClass.owner : "N/A"}
           </span>
         </div>
-        <StudyButton handleEllipsisClick={handleEllipsisClick} />
+        <StudyButton selectedClass={selectedClass} />
       </div>
     </div>
   );

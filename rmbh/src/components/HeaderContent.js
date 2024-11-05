@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Layout, Typography, Dropdown, Menu } from "antd";
 import { MoreOutlined } from "@ant-design/icons"; // Importing MoreOutlined for ellipsis icon
 import ClassDetail from "../components/ClassDetails/ClassDetail";
@@ -8,30 +8,36 @@ const { Title } = Typography;
 const HeaderContent = ({
   selectedClass,
   user,
-  handleEllipsisClick,
   selectedMenu,
   setSelectedMenu,
 }) => {
+  const [dropdownVisible, setDropdownVisible] = useState(false); // State to manage dropdown visibility
+
   // Menu items based on user role
-  const menu = (
-    <Menu>
-      {user?.role === "Owner" && (
-        <>
-          <Menu.Item key="edit" onClick={() => handleEllipsisClick('edit')}>
-            Edit class
-          </Menu.Item>
-          <Menu.Item key="delete" onClick={() => handleEllipsisClick('delete')}>
-            Delete class
-          </Menu.Item>
-        </>
-      )}
-      {user?.role === "Member" && (
-        <Menu.Item key="quit" onClick={() => handleEllipsisClick('quit')}>
-          Quit class
-        </Menu.Item>
-      )}
-    </Menu>
-  );
+  const menuItems = [
+    user?.role === "Owner" && {
+      key: "edit",
+      label: "Edit class",
+      onClick: () => handleEllipsisClick("edit"),
+    },
+    user?.role === "Owner" && {
+      key: "delete",
+      label: "Delete class",
+      onClick: () => handleEllipsisClick("delete"),
+    },
+    user?.role === "Member" && {
+      key: "quit",
+      label: "Quit class",
+      onClick: () => handleEllipsisClick("quit"),
+    },
+  ].filter(Boolean); // Remove any undefined items
+
+  const menu = <Menu items={menuItems} />;
+
+  const handleEllipsisClick = (option) => {
+    setDropdownVisible(false); // Close the dropdown when an option is clicked
+    console.log(`${option} clicked`); // Replace with actual logic for handling actions
+  };
 
   return (
     <Layout.Header
@@ -49,7 +55,12 @@ const HeaderContent = ({
             logo={selectedClass.logo}
           />
           {/* Ellipsis Dropdown for menu options */}
-          <Dropdown overlay={menu} trigger={['click']}>
+          <Dropdown
+            menu={menu}
+            open={dropdownVisible} // Control visibility of the dropdown
+            onOpenChange={setDropdownVisible} // Update visibility state
+            trigger={["click"]}
+          >
             <MoreOutlined className="cursor-pointer" />
           </Dropdown>
         </>

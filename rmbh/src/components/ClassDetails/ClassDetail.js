@@ -5,7 +5,6 @@ import MasteryScore from "../MasteryScore";
 
 const ClassDetails = ({
   selectedClass, // Nhận thông tin lớp học được chọn
-  handleEllipsisClick, // Hàm để xử lý click
   selectedMenu, // Trạng thái menu được chọn
   setSelectedMenu, // Hàm để cập nhật menu
 }) => (
@@ -13,7 +12,6 @@ const ClassDetails = ({
     <div className="first-row flex p-5 justify-between">
       <ClassInfo
         selectedClass={selectedClass} // Truyền thông tin lớp học vào ClassInfo
-        handleEllipsisClick={handleEllipsisClick} // Truyền hàm xử lý click
       />
       <MasteryScore />
     </div>

@@ -62,25 +62,6 @@ const App = () => {
     setSelectedClass(cls);
   };
 
-  const handleEllipsisClick = (action) => {
-    switch(action) {
-      case 'edit':
-        // Logic to handle class editing
-        console.log('Edit class clicked');
-        break;
-      case 'delete':
-        // Logic to handle class deletion
-        console.log('Delete class clicked');
-        break;
-      case 'quit':
-        // Logic to handle quitting the class
-        console.log('Quit class clicked');
-        break;
-      default:
-        break;
-    }
-  };
-
   // Main layout structure
   const layout = (
     <Layout style={{ minHeight: "100vh" }}>
@@ -105,7 +86,6 @@ const App = () => {
         <HeaderContent
           selectedClass={selectedClass}
           user={user} // Pass user object to HeaderContent
-          handleEllipsisClick={handleEllipsisClick} // Pass the click handler
           selectedMenu={selectedMenu}
           setSelectedMenu={setSelectedMenu}
         />
@@ -124,11 +104,6 @@ const App = () => {
         initialValues={user}
         onSubmit={handleProfileUpdate}
         onCancel={handleProfileModalCancel}
-      /> 
-
-      {/* Delete Class Popup */}
-      <DeleteClassPopup
-        visible={true}
       />
     </Layout>
   );

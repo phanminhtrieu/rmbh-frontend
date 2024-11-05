@@ -1,4 +1,5 @@
 // pages/Login.js
+import axios from "axios";
 import React, { useState } from "react";
 import { Button, Form, Input, Typography, message, Space } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -10,29 +11,33 @@ const Login = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     setLoading(true);
     const { username, password } = values;
 
-    if (username === "trieu" && password === "1") {
-      setTimeout(() => {
-        setLoading(false);
-        const userData = {
+    try {
+      // Gửi yêu cầu đăng nhập tới backend
+      const response = await axios.post(
+        "https://localhost:7109/api/frontend/authentications/login",
+        {
           email: username,
-          name: "Trieu",
-          id: "F8D170A5-02F7-4FF4-8C12-4EB83451FCD6",
-          avatarUrl: "https://via.placeholder.com/150",
-          classRole: 1,
-        };
+          password: password,
+        }
+      );
 
-        localStorage.setItem("user", JSON.stringify(userData));
-        message.success("Login successful!");
-        onLogin(userData);
-        navigate("/");
-      }, 1000);
-    } else {
-      setLoading(false);
+      // Nếu đăng nhập thành công
+      const userData = response.data; // Nhận thông tin người dùng từ backend
+
+      // Lưu thông tin người dùng vào localStorage
+      localStorage.setItem("user", JSON.stringify(userData));
+      message.success("Login successful!");
+      onLogin(userData);
+      navigate("/");
+    } catch (error) {
+      // Xử lý lỗi khi đăng nhập thất bại
       message.error("Invalid username or password!");
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -1,11 +1,11 @@
 import React from "react";
 import { Modal, Button } from "antd";
 
-const DeleteClassPopup = ({ visible, onConfirm, onCancel }) => {
+const DeleteClassPopup = ({ open, onConfirm, onCancel, selectedClass }) => {
   return (
     <Modal
       title="Confirm Deletion"
-      open={visible} // Control the visibility of the modal
+      open={open} // Control the visibility of the modal
       onOk={onConfirm} // Handle confirmation action
       onCancel={onCancel} // Handle cancel action
       footer={[
